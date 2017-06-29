@@ -1,9 +1,9 @@
-
-
 #Permisos de select en las tablas:
 GRANT SELECT ON ALL TABLES IN SCHEMA transport TO consulta;
+
 #Permisos de uso para las tablas:
 GRANT USAGE ON SCHEMA transport TO consulta;
+
 #Permisos a las tablas nuevas del esquema (debe hacerse con el user dueño)
 ALTER DEFAULT PRIVILEGES IN SCHEMA transport GRANT SELECT ON TABLES TO consulta;
 
@@ -21,3 +21,6 @@ CREATE USER mpena WITH PASSWORD 'xxx';
 
 #AGREGAR AL USUARIO AL ROL:
 GRANT consulta TO mpena
+
+#Comando para listar los permisos;
+\dp
