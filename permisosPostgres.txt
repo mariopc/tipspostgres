@@ -14,7 +14,7 @@ CREATE ROLE consulta;
 CREATE ROLE dba SUPERUSER INHERIT CREATEDB CREATEROLE REPLICATION;
 
 #AGREGAR COMENTARIO A UN ROL:
-comment on role "consulta" is 'ROL solo lectura - Area de Operaciones Tiaxa';
+comment on role "consulta" is 'ROL solo lectura';
 
 #CREAR USUARIO:
 CREATE USER mpena WITH PASSWORD 'xxx';
