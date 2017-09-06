@@ -6,6 +6,10 @@ pg_dump -Uuser -h127.0.0.1 database -Fc -s | pg_restore -l | grep FUNCTION
 
 pg_dump -Uuser -h127.0.0.1 database -Fc -s | pg_restore -P 'funcname(args)' > funcname.sql
 
-#Otra forma
+#Otra forma (Solo funciona si hay una funcion)
 
 psql -A -t -Uuser -h127.0.0.1 database -c "SELECT pg_catalog.pg_get_functiondef('schema.funcname'::regproc)" > schema.funcname.sql
+
+#La siguiente funciona si hay dos funciones con el mismo nombre:
+
+psql -A -t -Uuser -h127.0.0.1 database -c "SELECT pg_catalog.pg_get_functiondef('schema.funcname(args)'::regproc)" > schema.funcname.sql
