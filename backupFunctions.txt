@@ -4,4 +4,8 @@ pg_dump -Uuser -h127.0.0.1 database -Fc -s | pg_restore -l | grep FUNCTION
 
 #Realizar el backup:
 
-pg_dump -Uuser -h127.0.0.1 database -Fc -s | pg_restore -P 'funcname(args)'
+pg_dump -Uuser -h127.0.0.1 database -Fc -s | pg_restore -P 'funcname(args)' > funcname.sql
+
+#Otra forma
+
+psql -A -t -Uuser -h127.0.0.1 database -c "SELECT pg_catalog.pg_get_functiondef('schema.funcname'::regproc)" > schema.funcname.sql
