@@ -1,0 +1,7 @@
+#Listar las funciones disponibles;
+
+pg_dump -Uuser -h127.0.0.1 database -Fc -s | pg_restore -l | grep FUNCTION
+
+#Realizar el backup:
+
+pg_dump -Uuser -h127.0.0.1 database -Fc -s | pg_restore -P 'funcname(args)'
