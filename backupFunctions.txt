@@ -1,0 +1,3 @@
+psql -A -t -Uusername -h127.0.0.1 dbname -c "SELECT pg_catalog.pg_get_functiondef('schema.funcname'::regproc)" > schema.funcname.sql
+
+psql -A -t -Uusername -h127.0.0.1 dbname -c "SELECT pg_catalog.pg_get_functiondef('schema.funcname(args)'::regprocedure)" > schema.funcname.sql
