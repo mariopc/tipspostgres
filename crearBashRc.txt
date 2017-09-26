@@ -1,0 +1,30 @@
+
+Copiar en el archivo .bashrc del user postgres:
+
+case $TERM in
+        xterm*|rxvt|vt100)
+        PS1=$'\\[\E[31m\E[m\E(B\\]\\[\\033[0;35m\\][XCHANGE \\D{%Y-%m-%d} \\A][\\u@\\h:\\w]$\\[\\033[0m\\] '
+
+                PS2="\[\033]0;\u@\h: \w\007\]\[\033[0;35m\][\u@\h:\w]%\[\033[0m\] "
+                ;;
+        *)
+                PS1="\[\033[0;35m\][\u@\h:\w]$\[\033[0m\] "
+                PS2="\[\033[0;35m\][\u@\h:\w]%\[\033[0m\] "
+                ;;
+esac
+
+
+Copiar en el archivo .psqlrc:
+
+\set QUIET 1
+\timing
+\set ON_ERROR_ROLLBACK interactive
+\set VERBOSITY verbose
+\x auto
+\set PROMPT1 '%[%033[1;33;40m%]%M %n@%/%R%[%033[0m%]%# '
+\set PROMPT2 '[more] %R > '
+\set HISTFILE ~/.psql_history- :DBNAME
+\set HISTCONTROL ignoredups
+\pset null [null]
+\unset QUIE
+
