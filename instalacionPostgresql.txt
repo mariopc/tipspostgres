@@ -1,0 +1,118 @@
+Descargar los siguientes paquetes correspondientes a la distro:
+
+rpmfind:
+	libicu
+	libxslt
+
+https://yum.postgresql.org/X.x
+	postgresql[Version]-PGDG.[Distro].x86_64.rpm
+	postgresql[Version]-contrib-[Version]-1PGDG.[Distro].x86_64.rpm
+	postgresql[Version]-libs-[Version]-1PGDG.[Distro].x86_64.rpm
+	postgresql[Version]-server-[Version]-1PGDG.[Distro].x86_64.rpm
+
+Instalar:
+
+	yum local install rpm1 rpm2 ... rpmN
+
+Configurar prompt SO user:
+
+	editar el archivo /var/lib/pgsql/.pgsql_profile y agregarle lo siguiente:
+
+		case $TERM in
+    			xterm*|rxvt|vt100)
+		    	PS1=$'\\[\E[31m\E[m\E(B\\]\\[\\033[1;35m\\][Nombre Producto \\D{%Y-%m-%d} \\A][\\u@\\h:\\w]$\\[\\033[0m\\] '
+	            	PS2="\[\033]0;\u@\h: \w\007\]\[\033[0;35m\][\u@\h:\w]%\[\033[0m\] "
+	            	;;
+	    	*)
+	            	PS1="\[\033[0;35m\][\u@\h:\w]$\[\033[0m\] "
+	            	PS2="\[\033[0;35m\][\u@\h:\w]%\[\033[0m\] "
+	            	;;
+		esac
+
+		PGDATA=/var/lib/pgsql/[Postgres Version]/data
+		export PGDATA
+
+		PATH=$PATH:/usr/pgsql-[Postgres Version]/bin
+		export PATH
+
+	Editar archivo .psqlrc para mejorar el promp del postgres, agregar lo siguiente:
+	
+		\set QUIET 1
+		\timing
+		\set ON_ERROR_ROLLBACK interactive
+		\set VERBOSITY verbose
+		\x auto
+		\set PROMPT1 '%[%033[1;33;40m%]%M %n@%/%R%[%033[0m%]%# '
+		\set PROMPT2 '[more] %R > '
+		\set HISTFILE ~/.psql_history- :DBNAME
+		\set HISTCONTROL ignoredups
+		\pset null [null]
+		\unse
+
+Inicializar postgres:
+
+	pg_ctl initdb
+
+Crear directorio de logs:
+
+	cd /var/log/
+	mkdir -p postgres/pg_log
+	chown -R postgres.postgres postgres
+
+Revisar configuración archivo pg_hba.conf dentro del directorio data de postgres.
+
+Revisar configuración archivo postgresl.conf (cambiar directorio de logs y asignar listen en *)
+
+Iniciar base de datos:
+
+	pg_ctl start
+
+Crear Roles y usuarios:
+
+	CREATE ROLE consulta; -- rol para realizar select
+	CREATE ROL areaSoloSelect;
+	CREATE ROL areaAdmin;
+	CREATE ROLE dba SUPERUSER INHERIT CREATEDB CREATEROLE REPLICATION;
+
+	GRANT consulta TO areaAdmin;
+	GRANT dba TO areaAdmin;
+	GRANT consulta TO areaSoloSelect;
+
+	comment on role 'dba' is 'Comantario...'
+
+	CREATE USER user1 WITH PASSWORD 'xxx';
+
+	GRANT areaSoloSelect TO user1;
+
+	CREATE USER user2 WITH PASSWORD 'xxx';
+
+	GRANT areaAdmin TO user2;
+
+	CREATE USER testOwner WITH PASSWORD 'xxx';
+
+	CREATE DATABASE test1 with owner = testOwner;
+
+	\c test1
+
+	CREATE SCHEMA testSchema;
+
+	ALTER SCHEMA testSchema OWNER TO testOwner;
+
+	#Conectarse como user dueño
+
+	GRANT SELECT ON ALL TABLES IN SCHEMA testSchema TO consulta; --> Permisos de select en todas las tablas actuales para el rol consulta
+	GRANT USAGE ON SCHEMA testSchema TO consulta; --> Permiso de uso en todas las tablas actuales para el rol consulta
+	ALTER DEFAULT PRIVILEGES IN SCHEMA testSchema GRANT SELECT ON TABLES TO consulta; --> Permiso de select para las tablas futuras al rol consulta
+
+	##Modificar SearhPath:
+
+		Listas schemas:
+			
+			\dn
+
+		ALTER DATABASE XXXXX SET search_path = "$user", schema1,schema2, schema3, public;
+
+	
+
+
+
