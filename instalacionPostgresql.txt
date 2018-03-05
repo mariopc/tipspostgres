@@ -46,8 +46,7 @@ Configurar prompt SO user:
 		\set PROMPT2 '[more] %R > '
 		\set HISTFILE ~/.psql_history- :DBNAME
 		\set HISTCONTROL ignoredups
-		\pset null [null]
-		\unse
+		\pset null '[null]'
 
 Inicializar postgres:
 
